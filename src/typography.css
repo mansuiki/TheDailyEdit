@@ -1,0 +1,244 @@
+/* Instrument Serif is a regular display face; preserve its natural contrast and proportions. */
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/fonts/instrument-serif/InstrumentSerif-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --font-headline: 'Instrument Serif', Georgia, 'Noto Serif KR', 'AppleMyungjo', serif;
+  --headline-ink: #0d0d0d;
+  --headline-stroke: 0.2px;
+}
+
+/* Display type for names, stories and primary page headings; reading/UI fonts stay distinct. */
+.newspaper-masthead h1,
+.paper-nameplate h1,
+.page-imprint strong,
+.running-head span:nth-child(2),
+.paper-colophon b,
+.archive-cover h3,
+.archive-item-info h3,
+.archive-cover-headlines strong,
+.paper-reader .print-headline :is(h2, h3),
+.article-card .article-title h2,
+.article-dialog .dialog-inner > h2,
+.article-dialog .sources-list h3,
+.article-dialog .history-list h3,
+.print-briefs h4,
+.cover-teasers span,
+.related-reading strong,
+.headline-row h4,
+.picture-grid h4,
+.section-nameplate h2,
+.page-heading h2,
+.about-edition > h2,
+.brief-intro h3,
+.footer-logo {
+  font-family: var(--font-headline);
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
+  -webkit-text-stroke: var(--headline-stroke) currentColor;
+  color: var(--headline-ink);
+  letter-spacing: 0;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.setup-layout > fieldset > h3,
+.setup-aside h3 {
+  -webkit-text-stroke: var(--headline-stroke) currentColor;
+}
+
+/* The narrower face can read larger without changing the newspaper's column grid. */
+.paper-reader .cover-lead h2 {
+  font-size: clamp(32px, 3vw, 40px);
+}
+.paper-reader .inside-main .print-lead h3 {
+  font-size: 40px;
+}
+.paper-reader .inside-main .print-story:not(.print-lead) h3 {
+  font-size: 30px;
+}
+.paper-reader .cover-supporting h3,
+.paper-reader .cover-rail > article h3 {
+  font-size: 27px;
+}
+.paper-reader .cover-rail .rail-feature h3 {
+  font-size: 32px;
+}
+.paper-reader .lead-related h3 {
+  font-size: 25px;
+}
+.print-briefs h4,
+.related-reading strong {
+  font-size: 20px;
+  line-height: 1.2;
+}
+.paper-reader .print-headline :is(h2, h3) {
+  text-wrap: pretty;
+  margin-bottom: 14px;
+}
+.section-nameplate h2 {
+  font-size: clamp(40px, 4.3vw, 58px);
+  margin: 12px 0;
+  line-height: 1.08;
+}
+.section-nameplate > div:first-child {
+  min-width: 0;
+}
+.section-page-note {
+  flex: 0 0 auto;
+}
+.page-imprint strong,
+.running-head span:nth-child(2),
+.paper-colophon b {
+  font-size: 15px;
+  line-height: 1.4;
+}
+.page-heading h2,
+.about-edition > h2 {
+  font-size: clamp(36px, 4vw, 50px);
+  max-width: 24ch;
+  margin: 12px 0 16px;
+  text-wrap: balance;
+}
+.brief-intro h3 {
+  font-size: clamp(32px, 3vw, 40px);
+}
+.footer-logo {
+  font-size: 24px;
+}
+.archive-cover h3 {
+  font-size: 32px;
+}
+.archive-cover-headlines strong:first-child {
+  font-size: 24px;
+}
+.archive-item-info h3 {
+  font-size: 28px;
+}
+
+/* Preserve body readability and the existing photo/column grid. */
+.paper-reader .print-deck,
+.paper-reader .cover-rail article p {
+  line-height: 1.5;
+}
+.paper-reader .print-story .print-body,
+.paper-reader .lead-column-text {
+  font-size: 15px;
+  line-height: 1.65;
+}
+.article-dialog .dialog-inner > h2 {
+  font-size: clamp(34px, 4vw, 48px);
+  margin-block: 22px 18px;
+  text-wrap: pretty;
+}
+.article-dialog .article-body p {
+  line-height: 1.8;
+}
+.nav-tabs button,
+.press-shell .nav-tabs button {
+  font-size: 12px;
+}
+.workspace-brand {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.paper-section-tabs button {
+  font-size: 12px;
+}
+.print-byline,
+.print-byline span,
+.print-kicker {
+  font-size: 9px;
+}
+.settings-grid > * {
+  min-width: 0;
+}
+.checkboxes {
+  flex-wrap: wrap;
+}
+
+.newspaper-masthead > button {
+  min-width: 0;
+}
+.newspaper-masthead h1,
+.paper-nameplate h1 {
+  font-size: clamp(44px, 6vw, 82px);
+  line-height: 1.04;
+  white-space: normal;
+  text-wrap: balance;
+}
+.archive-cover h3 {
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.print-headline,
+.related-reading strong,
+.page-imprint strong,
+.running-head span:nth-child(2) {
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .newspaper-masthead h1,
+  .paper-nameplate h1 {
+    font-size: clamp(38px, 10vw, 56px);
+  }
+  .section-nameplate h2 {
+    font-size: clamp(36px, 8vw, 46px);
+  }
+  .nav-tabs button,
+  .press-shell .nav-tabs button {
+    font-size: 11px;
+  }
+  .paper-reader .cover-lead h2,
+  .paper-reader .inside-main .print-lead h3 {
+    font-size: 36px;
+  }
+  .paper-reader .inside-main .print-story:not(.print-lead) h3 {
+    font-size: 29px;
+  }
+}
+
+@media (max-width: 560px) {
+  .budget-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .site-shell.press-shell {
+    padding-inline: 16px;
+  }
+  .cover-supporting,
+  .inside-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .cover-supporting > div,
+  .inside-main > .print-story:not(.print-lead) {
+    border-right: 0;
+    padding-right: 0;
+  }
+  .cover-supporting > div + div,
+  .inside-main > .print-story + .print-story {
+    border-top: 1px solid var(--rule);
+    padding-top: 20px;
+  }
+  .inside-main .print-lead .print-body {
+    column-count: 1;
+  }
+  .paper-reader .print-story .print-body,
+  .paper-reader .lead-column-text {
+    text-align: left;
+  }
+  .section-page-note {
+    max-width: 72px;
+  }
+  .running-head span:nth-child(2) {
+    font-size: 12px;
+  }
+}

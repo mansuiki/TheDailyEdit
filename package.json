@@ -1,0 +1,51 @@
+{
+  "name": "the-daily-edit",
+  "version": "0.1.0",
+  "description": "Your world. Your paper. A personal newspaper written by Cline reporters and reviewed by an editor.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mansuiki/TheDailyEdit.git"
+  },
+  "homepage": "https://github.com/mansuiki/TheDailyEdit#readme",
+  "bugs": {
+    "url": "https://github.com/mansuiki/TheDailyEdit/issues"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env server/index.mjs",
+    "build": "vite build",
+    "start": "node --env-file-if-exists=.env server/index.mjs --production",
+    "preview:fresh": "node --env-file-if-exists=.env scripts/fresh-preview.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "preflight": "node --env-file-if-exists=.env scripts/preflight.mjs",
+    "calendar:setup": "node scripts/build-calendar-helper.mjs",
+    "maps:setup": "node scripts/build-map-helper.mjs"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.5.0",
+    "@radix-ui/react-tabs": "^1.2.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "express": "^5.1.0",
+    "fast-xml-parser": "^5.3.0",
+    "html-to-image": "^1.11.13",
+    "ipaddr.js": "^2.5.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "prettier": "^3.9.10",
+    "vite": "^7.1.0"
+  }
+}
