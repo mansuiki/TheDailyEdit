@@ -1,9 +1,8 @@
 // Cline 3.0.73 native connector transport. Credentials remain in Cline's store.
 // The proxy contract is pinned to the installed Cline source; no Composio key is copied.
-import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { findClineRuntime } from './cline-runtime.mjs';
 import { z } from 'zod';
 import { inWindow } from '../shared/edition.mjs';
 import { get, now, cleanText } from './utils.mjs';
@@ -12,15 +11,7 @@ const toolkits = ['gmail', 'googlecalendar'];
 async function runtime() {
   if (!initialized)
     initialized = (async () => {
-      const cli = fs.realpathSync(
-        process.env.CLINE_BIN || execFileSync('which', ['cline'], { encoding: 'utf8' }).trim(),
-      );
-      let root = path.dirname(cli);
-      while (!fs.existsSync(path.join(root, 'node_modules/@cline/core/package.json'))) {
-        const parent = path.dirname(root);
-        if (parent === root) throw new Error('Cline CLI installation not found.');
-        root = parent;
-      }
+      const root = findClineRuntime();
       core = await import(
         pathToFileURL(path.join(root, 'node_modules/@cline/core/dist/index.js')).href
       );

@@ -1,4 +1,6 @@
 import express from 'express';
+import fs from 'node:fs';
+import { createServer as createHttpServer } from 'node:http';
 import { createDemoEdition } from './demo-edition.mjs';
 import path from 'node:path';
 import { z } from 'zod';
@@ -32,6 +34,18 @@ import { mediaFile } from './media.mjs';
 import { preferencesSchema, interpretPreferences, preferenceFingerprint } from './preferences.mjs';
 import { routeRequestSchema, calculateRoute, routeMapFile } from './routes.mjs';
 const app = express();
+const production = process.argv.includes('--production');
+const port = Number(process.env.PORT || 4310);
+if (!Number.isInteger(port) || port < 0 || port > 65535) {
+  console.error('PORT must be a whole number between 0 and 65535. Set PORT in .env and try again.');
+  process.exit(1);
+}
+if (production && !fs.existsSync(path.resolve('dist/index.html'))) {
+  console.error('Production build not found. Run npm run build before npm start.');
+  process.exit(1);
+}
+const server = createHttpServer(app);
+let vite;
 const translate = createTranslator({
   model: runCline,
   readCache: readTranslation,
@@ -291,14 +305,26 @@ app.use((error, _req, res, _next) =>
     .type('json')
     .json({ error: error.message || 'Request failed' }),
 );
-if (process.argv.includes('--production')) app.use(express.static(path.resolve('dist')));
+if (production) app.use(express.static(path.resolve('dist')));
 else {
   const { createServer } = await import('vite');
-  const vite = await createServer({ server: { middlewareMode: true }, appType: 'spa' });
+  vite = await createServer({
+    server: { middlewareMode: true, hmr: { server } },
+    appType: 'spa',
+  });
   app.use(vite.middlewares);
 }
-app.listen(Number(process.env.PORT || 4310), '127.0.0.1', () => {
-  console.log('The Daily Edit → http://127.0.0.1:' + (process.env.PORT || 4310));
+server.once('error', async (error) => {
+  console.error(
+    error.code === 'EADDRINUSE'
+      ? `Port ${port} is already in use. Stop the other server or set PORT to another number in .env.`
+      : `Could not start the local server (${error.code || 'unknown error'}).`,
+  );
+  await vite?.close();
+  process.exit(1);
+});
+server.listen(port, '127.0.0.1', () => {
+  console.log('The Daily Edit → http://127.0.0.1:' + server.address().port);
   startScheduler();
   void refreshMedia();
 });

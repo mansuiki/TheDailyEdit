@@ -20,7 +20,7 @@ Started at the Cline hackathon in San Francisco.
 
 ## Requirements
 
-- **Node.js 24+** and npm. A `.nvmrc` is included for Node version managers.
+- **Node.js 24** is recommended (minimum 24) with npm, plus Git to clone the repository. A `.nvmrc` is included for Node version managers. Without a version manager, install Node 24 from [nodejs.org](https://nodejs.org/en/download) and confirm `node --version` in your terminal.
 - **Cline CLI 3.0.73**, signed in to the **Cline provider** with a model configured and available credits. This integration uses its bundled ClineCore 0.0.95. A ChatGPT login alone does not configure the app’s current adapter.
 - **macOS 14+ and Xcode Command Line Tools** for the optional iCloud Calendar and Apple Maps helpers. The full application has been verified on macOS; other platforms have not been verified end to end.
 
@@ -34,10 +34,13 @@ cd TheDailyEdit
 npm ci
 npm install -g cline@3.0.73  # Skip if already installed at this version
 cline auth                  # Choose Cline, sign in, and configure a model
+npm run doctor              # Check local prerequisites without using model credits
 npm run dev
 ```
 
 Open [http://127.0.0.1:4310](http://127.0.0.1:4310). A fresh checkout starts with no personal data or published issues.
+
+The CLI and the app must run as the same operating-system user so they share the Cline sign-in. Each new user needs their own Cline account/model setup and credits; the repository contains no credentials or connected accounts. A successful `doctor` check confirms local configuration, not token validity or credit balance. If global npm installation reports a permissions error, use a user-owned Node installation such as nvm and retry without `sudo`.
 
 1. **Your world:** enter your location, activity, interests and edition timezone.
 2. **Your pages:** choose the sections and page counts. The starter paper has Technology and World, with three pages including the cover.
@@ -52,6 +55,8 @@ For a production build on your computer:
 npm run build
 npm start
 ```
+
+Stop the development server with **Ctrl+C** before starting the production server on the same port. If you want both at once, create `.env` from `.env.example`, change `PORT` for one checkout and open the address printed by that server. A missing `.env` notice is normal when using defaults.
 
 ## Optional services
 
@@ -93,30 +98,32 @@ After building the maps helper, select an event in **Your Week**, enter a starti
 
 ## Commands
 
-| Command                  | Purpose                                                          |
-| ------------------------ | ---------------------------------------------------------------- |
-| `npm run dev`            | Start the Express + Vite development server                      |
-| `npm test`               | Run isolated tests without network or model calls                |
-| `npm run build`          | Build the browser app into `dist/`                               |
-| `npm start`              | Serve the production build and API locally; build first          |
-| `npm run preview:fresh`  | Build and serve a separate empty workspace on port 4311          |
-| `npm run preflight`      | Check public feeds, connector status and a short paid Cline call |
-| `npm run calendar:setup` | Build the optional macOS EventKit helper                         |
-| `npm run maps:setup`     | Build the optional macOS MapKit helper                           |
+| Command                  | Purpose                                                                                      |
+| ------------------------ | -------------------------------------------------------------------------------------------- |
+| `npm run dev`            | Start the Express + Vite development server                                                  |
+| `npm test`               | Run isolated tests without network or model calls                                            |
+| `npm run doctor`         | Check local Node/Cline setup and optional helper availability without network or model calls |
+| `npm run build`          | Build the browser app into `dist/`                                                           |
+| `npm start`              | Serve the production build and API locally; build first                                      |
+| `npm run preview:fresh`  | Build and serve a separate empty workspace on port 4311                                      |
+| `npm run preflight`      | Check public feeds, connector status and a short paid Cline call                             |
+| `npm run calendar:setup` | Build the optional macOS EventKit helper                                                     |
+| `npm run maps:setup`     | Build the optional macOS MapKit helper                                                       |
 
 Stop the server with **Ctrl+C**. Restarting preserves preferences, connections and editions. Scheduling runs only while the server is running and the computer is awake. `preview:fresh` creates a new `.data/previews/first-run-*` directory without clearing the main newspaper; it reuses this machine’s Cline login and native helpers.
 
 ## Troubleshooting
 
-| Problem                                | What to check                                                                                                                                    |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Node cannot load `node:sqlite`         | Run `node --version` and use Node 24+ in the same terminal as the server                                                                         |
-| Cline installation or model not found  | Check `cline --version`, use CLI 3.0.73, and run `cline auth` with the Cline provider and a configured model; set `CLINE_BIN` if needed          |
-| Port already in use                    | Stop the previous server or set a different `PORT` in `.env`; for a fresh preview, set `NEWSROOM_PREVIEW_PORT`                                   |
-| Google access pending or expired       | Reconnect through the account card, complete sign-in and check authorization again                                                               |
-| iCloud not configured, denied or empty | Build the helper, check macOS Calendar permissions and confirm the iCloud account is synced in Apple Calendar                                    |
-| Publication fails                      | Review the displayed error and Newsroom status; check Cline login/credits and retry. Use **Finish incomplete pages** for failed page assignments |
-| Optional source unavailable            | Check its key or source status; other available sources remain usable                                                                            |
+| Problem                                | What to check                                                                                                                                                 |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Node cannot load `node:sqlite`         | Run `node --version` and use Node 24+ in the same terminal as the server                                                                                      |
+| Cline installation or model not found  | Run `npm run doctor`, check `cline --version`, use CLI 3.0.73, and run `cline auth` with the Cline provider and a configured model; set `CLINE_BIN` if needed |
+| Production build not found             | Run `npm run build` before `npm start`                                                                                                                        |
+| Port already in use                    | Stop the previous server or set a different `PORT` in `.env`; for a fresh preview, set `NEWSROOM_PREVIEW_PORT`                                                |
+| Google access pending or expired       | Reconnect through the account card, complete sign-in and check authorization again                                                                            |
+| iCloud not configured, denied or empty | Build the helper, check macOS Calendar permissions and confirm the iCloud account is synced in Apple Calendar                                                 |
+| Publication fails                      | Review the displayed error and Newsroom status; check Cline login/credits and retry. Use **Finish incomplete pages** for failed page assignments              |
+| Optional source unavailable            | Check its key or source status; other available sources remain usable                                                                                         |
 
 `npm run preflight` makes real network requests and a small Cline model call. It checks connector status without reading email or calendar content; it does not check the native iCloud helper.
 

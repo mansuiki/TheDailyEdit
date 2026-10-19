@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { z } from 'zod';
+import { workerFailure } from './cline-runtime.mjs';
 export const draftSchema = z.object({
   id: z.string().min(1).max(120),
   title: z.string().min(1).max(150),
@@ -140,13 +141,7 @@ export async function runCline(system, input, onProgress = () => {}) {
       child.on('close', (code) => {
         if (buffer.trim()) consume(buffer);
         if (code !== 0 || !lastResult?.text || lastResult.finishReason === 'aborted')
-          return finish(
-            new Error(
-              /auth|401|login/i.test(stderr)
-                ? 'Cline authentication expired. Run cline auth.'
-                : 'Cline did not finish. Please try again.',
-            ),
-          );
+          return finish(new Error(workerFailure(stderr)));
         try {
           finish(null, {
             data: parseModelJson(lastResult.text),
